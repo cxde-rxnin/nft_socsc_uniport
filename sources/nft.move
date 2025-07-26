@@ -15,7 +15,7 @@ public struct OBXXD <phantom T> has key, store {
     name: String,
     rarity: u8,
     description: String,
-    url: Url,
+    image_url: Url,
     balance: Balance<T>,
 }
 
@@ -23,7 +23,7 @@ public struct NFTminted has copy, drop {
     rarity: u8,
     nft_name: String,
     description: String,
-    url: Url,
+    image_url: Url,
 }
 
 
@@ -36,14 +36,14 @@ public entry fun mint_nft(
     ctx: &mut TxContext
 ) {
     let sender = tx_context::sender(ctx);
-    let url = url::new_unsafe_from_bytes(url_string.into_bytes());
-    
+    let image_url = url::new_unsafe_from_bytes(url_string.into_bytes());
+
     let nft: OBXXD<SUI> = OBXXD {
         id: object::new(ctx),
         name,
         rarity,
         description,
-        url,
+        image_url,
         balance: balance::zero<SUI>(),
     };
 
@@ -51,7 +51,7 @@ public entry fun mint_nft(
         rarity,
         nft_name: name,
         description,
-        url,
+        image_url,
     });
 
     transfer::public_transfer(nft, sender);
@@ -81,7 +81,7 @@ public entry fun withdraw_balance<T: store>(
 public struct Art has key, store {
     id: UID,
     name: String,
-    url: Url,
+    image_url: Url,
     balance: Balance<SUI>,
 }
 
@@ -92,7 +92,7 @@ public fun mint(name: String, url: Url, ctx: &mut TxContext): Art {
     Art {
         id: object::new(ctx),
         name,
-        url,
+        image_url: url,
         balance: balance::zero(),
     }
 }
